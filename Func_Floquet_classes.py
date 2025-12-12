@@ -59,14 +59,11 @@ def solve_time_evolution(Ht, ts, omega, quasienergies=False, steps=False):
     solver.set_initial_value(psi0.ravel('F'), ts[0])
 
     Us, tsCheck = [], []
-    if steps:
-        tsCheck.append(solver.t)
-        Us.append(np.reshape(solver.y, (norbs, norbs)).T)
-
     while solver.successful() and len(tsCheck) < len(ts):
+
         solver.integrate(solver.t + dt, step=False)
+        tsCheck.append(solver.t)
         if steps:
-            tsCheck.append(solver.t)
             Us.append(np.reshape(solver.y, (norbs, norbs)).T)
     if not steps:
         U = np.reshape(solver.y, (norbs, norbs)).T
